@@ -44,6 +44,7 @@ public class JwtUtils {
     }
     
     public static void TokenVerification(String auth) {
+    	System.out.println("auth=====>>>"+auth);
         try {
             String[] parts = auth.split(" ");
             String token;
@@ -52,6 +53,7 @@ public class JwtUtils {
             } else {
                 token = parts[1];
             }
+            System.out.println(token);
             Algorithm algorithm = Algorithm.HMAC256(SECRET);
             JWTVerifier verifier = JWT.require(algorithm).withIssuer(ISSUER).build();
             verifier.verify(token);

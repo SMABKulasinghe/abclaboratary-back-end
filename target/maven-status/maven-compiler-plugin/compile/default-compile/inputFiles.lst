@@ -1,4 +1,5 @@
 F:\ICBT\Assignments\gitversion\backend\abclaboratary-back-end\src\main\java\com\abclaboratary\abclaboratary\common\PasswordUtils.java
+F:\ICBT\Assignments\gitversion\backend\abclaboratary-back-end\src\main\java\com\abclaboratary\abclaboratary\common\SecurityConfiguration.java
 F:\ICBT\Assignments\gitversion\backend\abclaboratary-back-end\src\main\java\com\abclaboratary\abclaboratary\common\WebMvcConfig.java
 F:\ICBT\Assignments\gitversion\backend\abclaboratary-back-end\src\main\java\com\abclaboratary\abclaboratary\common\JwtUtils.java
 F:\ICBT\Assignments\gitversion\backend\abclaboratary-back-end\src\main\java\com\abclaboratary\abclaboratary\entity\Patient.java
@@ -8,7 +9,10 @@ F:\ICBT\Assignments\gitversion\backend\abclaboratary-back-end\src\main\java\com\
 F:\ICBT\Assignments\gitversion\backend\abclaboratary-back-end\src\main\java\com\abclaboratary\abclaboratary\serviceimpl\AuthServiceImpl.java
 F:\ICBT\Assignments\gitversion\backend\abclaboratary-back-end\src\main\java\com\abclaboratary\abclaboratary\service\AuthService.java
 F:\ICBT\Assignments\gitversion\backend\abclaboratary-back-end\src\main\java\com\abclaboratary\abclaboratary\repo\UserRepo.java
+F:\ICBT\Assignments\gitversion\backend\abclaboratary-back-end\src\main\java\com\abclaboratary\abclaboratary\serviceimpl\ReportServiceImpl.java
 F:\ICBT\Assignments\gitversion\backend\abclaboratary-back-end\src\main\java\com\abclaboratary\abclaboratary\common\JWTInterceptor.java
+F:\ICBT\Assignments\gitversion\backend\abclaboratary-back-end\src\main\java\com\abclaboratary\abclaboratary\controller\ReportController.java
 F:\ICBT\Assignments\gitversion\backend\abclaboratary-back-end\src\main\java\com\abclaboratary\abclaboratary\entity\User.java
+F:\ICBT\Assignments\gitversion\backend\abclaboratary-back-end\src\main\java\com\abclaboratary\abclaboratary\service\ReportService.java
 F:\ICBT\Assignments\gitversion\backend\abclaboratary-back-end\src\main\java\com\abclaboratary\abclaboratary\entity\UserRole.java
 F:\ICBT\Assignments\gitversion\backend\abclaboratary-back-end\src\main\java\com\abclaboratary\abclaboratary\AbclaborataryApplication.java
