@@ -14,4 +14,6 @@ public interface ReportService {
 
 	JSONObject approveOrRejectReport(HttpServletRequest request, long id, long reId);
 
+	JSONObject getDoctorAndReportList(HttpServletRequest request);
+
 }

@@ -127,8 +127,13 @@ public class AuthServiceImpl implements AuthService {
                 if (flag) {
                     JwtUtils jwtUtils = new JwtUtils();
                     String token = jwtUtils.generateToken(user.getUserEmail());
+                    
+                    JSONObject data2 = new JSONObject();
+//                    data.put("userId", user.getUserId());
+//                    data2.put("userEmail", user.getUserEmail());
 
                     data.put("userrole", user.getUserRole());
+                    data.put("userdata", user.getUserId());
                     data.put("token", token);
                     data.put("status", "00");
             		data.put("statusCode", "LogedIn");

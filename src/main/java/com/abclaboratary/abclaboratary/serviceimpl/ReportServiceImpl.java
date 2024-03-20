@@ -11,10 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.abclaboratary.abclaboratary.common.JwtUtils;
 import com.abclaboratary.abclaboratary.common.PasswordUtils;
+import com.abclaboratary.abclaboratary.entity.Doctor;
 import com.abclaboratary.abclaboratary.entity.Patient;
 import com.abclaboratary.abclaboratary.entity.Report;
 import com.abclaboratary.abclaboratary.entity.ReportDetails;
 import com.abclaboratary.abclaboratary.entity.User;
+import com.abclaboratary.abclaboratary.repo.DoctorRepo;
 import com.abclaboratary.abclaboratary.repo.PatientRepo;
 import com.abclaboratary.abclaboratary.repo.ReportDetailsRepo;
 import com.abclaboratary.abclaboratary.repo.ReportRepo;
@@ -43,6 +45,9 @@ public class ReportServiceImpl implements ReportService {
 	
 	@Autowired
 	ReportDetailsRepo reportDetailsRepo;
+	
+	@Autowired
+	DoctorRepo doctorRepo;
 
 	@Override
 	public JSONObject createReports(JSONObject createReports) {
@@ -205,6 +210,52 @@ public class ReportServiceImpl implements ReportService {
 			
 			data.put("status", "Error");
 			data.put("statusCode", "03");
+			return data;
+			
+		}
+	}
+
+	@Override
+	public JSONObject getDoctorAndReportList(HttpServletRequest request) {
+		JSONObject data = new JSONObject();
+		try {
+			
+			JSONArray ar1 = new JSONArray();
+			List<Report> reports = reportRepo.findAllByStatus(7L);
+			for(Report report : reports) {
+				JSONObject ob = new JSONObject();
+				ob.put("reportName", report.getReportName());
+				ob.put("reportDescription", report.getReportDescription());
+				ob.put("id", report.getReportId());
+				ob.put("status", report.getStatus());
+				
+				ar1.add(ob);
+			}
+			
+			JSONArray ar2 = new JSONArray();
+			List<Doctor> doctors = doctorRepo.findAllByStatus(11L);
+			for(Doctor doctor : doctors) {
+				JSONObject ob = new JSONObject();
+				ob.put("doctorName", doctor.getDoctorName());
+				ob.put("doctorSpecilization", doctor.getDoctorSpecialization());
+				ob.put("id", doctor.getDoctorId());
+				ob.put("status", doctor.getStatus());
+				
+				ar2.add(ob);
+			}
+			
+			
+			data.put("reportList", ar1);
+			data.put("doctorList", ar2);
+			data.put("status", "00");
+			data.put("statusCode", "Success");
+			return data;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			data.put("status", "03");
+			data.put("statusCode", "Error");
 			return data;
 			
 		}
