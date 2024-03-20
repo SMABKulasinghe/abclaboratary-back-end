@@ -3,8 +3,8 @@ package com.abclaboratary.abclaboratary.repo;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
+import com.abclaboratary.abclaboratary.entity.Doctor;
 import com.abclaboratary.abclaboratary.entity.Patient;
-import com.abclaboratary.abclaboratary.entity.Report;
 
 import java.util.List;
 
@@ -15,11 +15,8 @@ import org.springframework.data.jpa.repository.Query;
 
 @Repository
 @Component
-public interface ReportRepo extends JpaRepository<Report,Long>{
+public interface DoctorRepo extends JpaRepository<Doctor,Long>{
 
-	@Query("SELECT re FROM Report re WHERE re.reportName LIKE %?1% OR re.reportDescription LIKE %?1% OR re.reportPreperation LIKE %?1%")
-	Page<Report> getAllReportsForTable(String parameter, PageRequest of);
-
-	List<Report> findAllByStatus(long l);
+	List<Doctor> findAllByStatus(long l);
 
 }

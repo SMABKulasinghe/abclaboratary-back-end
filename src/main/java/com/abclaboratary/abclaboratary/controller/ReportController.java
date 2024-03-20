@@ -86,6 +86,20 @@ public class ReportController {
 			
 	}
 	
+	@GetMapping("/get-doctor-and-report-list")
+	public ResponseEntity<JSONObject> getDoctorAndReportList(HttpServletRequest request){
+		try {
+
+			JSONObject data=reportService.getDoctorAndReportList(request);
+			return new ResponseEntity<JSONObject>(data, HttpStatus.OK);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+			
+	}
+	
 	
 
 }
