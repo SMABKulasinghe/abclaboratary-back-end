@@ -24,6 +24,9 @@ public class Patient implements Serializable{
 	@Column(name="patient_email")
 	private String patientEmail;
 	
+	@Column(name="patient_gender")
+	private String patientGender;
+	
 	@Column(name="user_id")
 	private Long userId;
 	
@@ -90,6 +93,14 @@ public class Patient implements Serializable{
 
 	public void setPatientPhone(String patientPhone) {
 		this.patientPhone = patientPhone;
+	}
+
+	public String getPatientGender() {
+		return patientGender;
+	}
+
+	public void setPatientGender(String patientGender) {
+		this.patientGender = patientGender;
 	}
 	
 	

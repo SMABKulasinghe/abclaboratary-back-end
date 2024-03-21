@@ -100,6 +100,16 @@ public class ReportController {
 			
 	}
 	
+	@PostMapping(value = "/submit-report-for-appoinment")
+	public ResponseEntity<JSONObject> submitReportForAppoinmentData(@RequestBody JSONObject reportForAppoinmentData) {
+		JSONObject data = null;
+		try {
+			data = reportService.submitReportForAppoinmentData(reportForAppoinmentData);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<JSONObject>(data, HttpStatus.OK);
+	}
 	
 
 }
