@@ -11,15 +11,19 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.abclaboratary.abclaboratary.common.JwtUtils;
 import com.abclaboratary.abclaboratary.common.PasswordUtils;
+import com.abclaboratary.abclaboratary.entity.Appoinment;
 import com.abclaboratary.abclaboratary.entity.Doctor;
 import com.abclaboratary.abclaboratary.entity.Patient;
 import com.abclaboratary.abclaboratary.entity.Report;
 import com.abclaboratary.abclaboratary.entity.ReportDetails;
+import com.abclaboratary.abclaboratary.entity.ReportSubmittedDetails;
 import com.abclaboratary.abclaboratary.entity.User;
+import com.abclaboratary.abclaboratary.repo.AppoinmentRepo;
 import com.abclaboratary.abclaboratary.repo.DoctorRepo;
 import com.abclaboratary.abclaboratary.repo.PatientRepo;
 import com.abclaboratary.abclaboratary.repo.ReportDetailsRepo;
 import com.abclaboratary.abclaboratary.repo.ReportRepo;
+import com.abclaboratary.abclaboratary.repo.ReportSubmittedDetailsRepo;
 import com.abclaboratary.abclaboratary.repo.UserRepo;
 import com.abclaboratary.abclaboratary.service.AuthService;
 import com.abclaboratary.abclaboratary.service.ReportService;
@@ -48,6 +52,12 @@ public class ReportServiceImpl implements ReportService {
 	
 	@Autowired
 	DoctorRepo doctorRepo;
+	
+	@Autowired
+	AppoinmentRepo appoinmentRepo;
+	
+	@Autowired
+	ReportSubmittedDetailsRepo reportSubmittedDetailsRepo;
 
 	@Override
 	public JSONObject createReports(JSONObject createReports) {
@@ -259,6 +269,71 @@ public class ReportServiceImpl implements ReportService {
 			return data;
 			
 		}
+	}
+
+	@Override
+	public JSONObject submitReportForAppoinmentData(JSONObject reportForAppoinmentData) {
+		JSONObject data = new JSONObject();
+		String status = null;
+		String statusCode = null;
+		
+		
+		try {
+			
+				
+				String appoinmentid = reportForAppoinmentData.get("appoinmentid").toString();
+				System.out.println("appoinmentid-"+appoinmentid);
+				
+				if(!reportSubmittedDetailsRepo.existsByAppoinmentId(Long.valueOf(appoinmentid))) {
+					Optional<Appoinment> appoinment = appoinmentRepo.findById(Long.valueOf(appoinmentid));
+					appoinment.get().setStatus(15L);
+					appoinmentRepo.save(appoinment.get());
+					
+					Optional<Report> report = reportRepo.findById(appoinment.get().getReportId());
+					
+					ArrayList parameterDataArray = (ArrayList) reportForAppoinmentData.get("formDataArray");
+
+					for (Object parameterName : parameterDataArray) {
+
+						String id = (String) (((HashMap) parameterName).get("id"));
+						String value = (String) (((HashMap) parameterName).get("value"));
+						
+						Optional<ReportDetails> rd = reportDetailsRepo.findById(Long.valueOf(id));
+						
+						ReportSubmittedDetails rds = new ReportSubmittedDetails();
+						rds.setFemaleRange(rd.get().getFemaleRange());
+						rds.setMaleRange(rd.get().getMaleRange());
+						rds.setParameterName(rd.get().getParameterName());
+						rds.setParameterScale(rd.get().getParameterScale());
+						rds.setReportDetailsId(rd.get().getReportDetailsId());
+						rds.setReportId(report.get().getReportId());
+						rds.setAppoinmentId(appoinment.get().getAppoinmentId());
+						rds.setResults(value);
+						rds.setStatus(15L);
+						reportSubmittedDetailsRepo.save(rds);
+					}
+					
+					status = "Success";
+					statusCode = "00";
+				}else {
+					status = "Duplicate";
+					statusCode = "04";
+				}
+				
+				
+				
+				
+				
+			
+			data.put("status", status);
+			data.put("statusCode", statusCode);
+
+        } catch (Exception e) {
+        	e.printStackTrace();
+        	data.put("status", "03");
+    		data.put("statusCode", "Error");
+        }
+		return data;
 	}
 
 	

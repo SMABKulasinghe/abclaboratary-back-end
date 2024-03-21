@@ -16,4 +16,6 @@ public interface ReportService {
 
 	JSONObject getDoctorAndReportList(HttpServletRequest request);
 
+	JSONObject submitReportForAppoinmentData(JSONObject reportForAppoinmentData);
+
 }
