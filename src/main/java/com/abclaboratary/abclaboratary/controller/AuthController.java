@@ -50,6 +50,17 @@ public class AuthController {
 		return new ResponseEntity<JSONObject>(data, HttpStatus.OK);
 	}
 	
+	@PostMapping(value = "/register-user")
+	public ResponseEntity<JSONObject> registerUser(@RequestBody JSONObject registerUser) {
+		JSONObject data = null;
+		try {
+			data = authService.registerUser(registerUser);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<JSONObject>(data, HttpStatus.OK);
+	}
+	
 	
 
 }

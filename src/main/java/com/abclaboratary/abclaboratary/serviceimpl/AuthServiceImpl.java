@@ -155,4 +155,10 @@ public class AuthServiceImpl implements AuthService {
 		return data;
 	}
 
+	@Override
+	public JSONObject registerUser(JSONObject registerUser) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
