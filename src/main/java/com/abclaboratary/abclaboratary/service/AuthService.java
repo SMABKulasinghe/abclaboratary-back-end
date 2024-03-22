@@ -10,4 +10,6 @@ public interface AuthService {
 
 	JSONObject login(JSONObject login);
 
+	JSONObject registerUser(JSONObject registerUser);
+
 }
