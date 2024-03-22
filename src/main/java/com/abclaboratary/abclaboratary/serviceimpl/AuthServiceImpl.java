@@ -6,12 +6,18 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.print.Doc;
 import javax.servlet.http.HttpServletRequest;
 
+import com.abclaboratary.abclaboratary.common.Common;
 import com.abclaboratary.abclaboratary.common.JwtUtils;
 import com.abclaboratary.abclaboratary.common.PasswordUtils;
+import com.abclaboratary.abclaboratary.entity.Doctor;
+import com.abclaboratary.abclaboratary.entity.LabTechnician;
 import com.abclaboratary.abclaboratary.entity.Patient;
 import com.abclaboratary.abclaboratary.entity.User;
+import com.abclaboratary.abclaboratary.repo.DoctorRepo;
+import com.abclaboratary.abclaboratary.repo.LabTechnicianRepo;
 import com.abclaboratary.abclaboratary.repo.PatientRepo;
 import com.abclaboratary.abclaboratary.repo.UserRepo;
 import com.abclaboratary.abclaboratary.service.AuthService;
@@ -29,6 +35,15 @@ public class AuthServiceImpl implements AuthService {
 	
 	@Autowired
 	PatientRepo patientRepo;
+	
+	@Autowired
+	Common common;
+	
+	@Autowired
+	DoctorRepo doctorRepo;
+	
+	@Autowired
+	LabTechnicianRepo labTechnicianRepo;
 
 	@Override
 	public JSONObject registerPatient(JSONObject registerPatient) {
@@ -157,8 +172,132 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	public JSONObject registerUser(JSONObject registerUser) {
-		// TODO Auto-generated method stub
-		return null;
+		JSONObject data = new JSONObject();
+		String status = null;
+		String statusCode = null;
+		try {
+			System.out.println("inside");
+			
+			String name = registerUser.get("name").toString();
+			String email = registerUser.get("email").toString();
+			String dob = registerUser.get("dob").toString();
+			String nic = registerUser.get("nic").toString();
+			String telephone = registerUser.get("telephone").toString();
+			String gender = registerUser.get("gender").toString();
+			String registrationno = registerUser.get("registrationno").toString();
+			String position = registerUser.get("position").toString();
+			
+			String regex = "\\+94[1-9]\\d{8}";
+			//Correct phone no - +94711664123
+			
+			Pattern pattern = Pattern.compile(regex);		
+			Matcher matcher = pattern.matcher(telephone);
+			
+			if(!userRepo.existsByUserEmail(email)) {
+				if(matcher.matches()) {
+					
+					String randompassword = common.generateRandomPassword();
+						
+					
+					
+						PasswordUtils passwordUtils = new PasswordUtils();
+			            String encodedPassword = passwordUtils.encodePassword(randompassword);
+			            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			            Date dobDate = dateFormat.parse(dob);
+			            
+			            Doctor doc = new Doctor();
+			            LabTechnician lt = new LabTechnician();
+			            
+			            Long postition1 = null;
+			            if(position.equals("Doctor")) {
+			            	postition1 = 2L;
+			            	
+			            	String spelist = "Speaclist";
+			            	
+			            	User user = new User();
+							user.setUserName(name != null ? name : "");
+							user.setUserEmail(email != null ? email : "");
+							user.setUserPassword(encodedPassword != null ? encodedPassword : "");
+							user.setUserPhone(telephone);
+							user.setStatus(Long.valueOf(2));
+							user.setUserRole(Long.valueOf(postition1));
+							user = userRepo.save(user);
+							
+							doc.setDoctorDob(dobDate);
+							doc.setDoctorEmail(email);
+							doc.setDoctorName(name);
+							doc.setDoctorPhone(telephone);
+							doc.setDoctorRegistrationNo(registrationno);
+							doc.setDoctorSpecialization(spelist);
+							doc.setGender(gender);
+							doc.setStatus(11L);
+							doc.setUserId(user.getUserId());
+							doc = doctorRepo.save(doc);
+			            	
+			            }else if(position.equals("Technician")) {
+			            	postition1 = 4L;
+			            	
+			            	User user = new User();
+							user.setUserName(name != null ? name : "");
+							user.setUserEmail(email != null ? email : "");
+							user.setUserPassword(encodedPassword != null ? encodedPassword : "");
+							user.setUserPhone(telephone);
+							user.setStatus(Long.valueOf(2));
+							user.setUserRole(Long.valueOf(postition1));
+							user = userRepo.save(user);
+			            	
+			            	lt.setGender(gender);
+			            	lt.setLabTechnicianDob(dobDate);
+			            	lt.setLabTechnicianEmail(email);
+			            	lt.setLabTechnicianName(name);
+			            	lt.setLabTechnicianPhone(telephone);
+			            	lt.setStatus(18L);
+			            	lt.setUserId(user.getUserId());
+			            	lt.setLabTechnicianRegisterNo(registrationno);
+			            	labTechnicianRepo.save(lt);
+			            }
+						
+						
+						String emailabove = common.getEmailabove();
+						String emailmiddle = "<div style=\"line-height: 140%; text-align: left; word-wrap: break-word;\">"
+								+ "<p style=\"font-size: 14px; line-height: 140%;\"><span style=\"font-size: 18px; line-height: 25.2px; color: #666666;\">Hello,</span></p>"
+								+ "<p style=\"font-size: 14px; line-height: 140%;\"> </p>"
+								+ "<p style=\"font-size: 14px; line-height: 140%;\"><span style=\"font-size: 18px; line-height: 25.2px; color: #666666;\">Dear "+name+",</span></p>"
+								+ "<p style=\"font-size: 14px; line-height: 140%;\"> </p>"
+								+ "<p style=\"font-size: 14px; line-height: 140%;\"><span style=\"font-size: 18px; line-height: 25.2px; color: #666666;\">Please login to ABC Laboratory system using this email ("+email+") and this password: "+randompassword+".</span></p>"
+								+ "<p style=\"font-size: 14px; line-height: 140%;\"> </p>"
+								+ "<p style=\"font-size: 14px; line-height: 140%;\"><span style=\"font-size: 18px; line-height: 25.2px; color: #666666;\">Thank you</span></p>"
+								
+								+ "</div>";
+						String emailbelow = common.getEmailabelow();
+						
+						String completeEmail = emailabove+emailmiddle+emailbelow;
+						
+						common.sendEMail(email, "ABC Laboratory", completeEmail);
+						
+						status = "Success";
+						statusCode = "00";
+					
+				}else {
+					status = "Phone number is wrong. Please make as : +94711231230";
+					statusCode = "06";
+				}
+				
+			}else {
+				status = "Email alread exist";
+				statusCode = "05";
+			}
+
+		}catch(Exception e) {
+			e.printStackTrace();
+			status = "Error";
+			statusCode = "03";
+		} 
+		
+		data.put("status", status);
+		data.put("statusCode", statusCode);
+		data.put("data", "");
+		return data;
 	}
 
 }

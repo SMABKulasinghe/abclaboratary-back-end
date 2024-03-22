@@ -35,6 +35,16 @@ public class Doctor implements Serializable{
 	
 	@Column(name="doctor_specialization")
 	private String doctorSpecialization;
+	
+	@Column(name="doctor_regitration_no")
+	private String doctorRegistrationNo;
+	
+	@Column(name="gender")
+	private String gender;
+	
+	@Column(name="doctor_dob")
+	private Date doctorDob;
+
 
 	public Long getDoctorId() {
 		return doctorId;
@@ -90,6 +100,30 @@ public class Doctor implements Serializable{
 
 	public void setDoctorSpecialization(String doctorSpecialization) {
 		this.doctorSpecialization = doctorSpecialization;
+	}
+
+	public String getDoctorRegistrationNo() {
+		return doctorRegistrationNo;
+	}
+
+	public void setDoctorRegistrationNo(String doctorRegistrationNo) {
+		this.doctorRegistrationNo = doctorRegistrationNo;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public Date getDoctorDob() {
+		return doctorDob;
+	}
+
+	public void setDoctorDob(Date doctorDob) {
+		this.doctorDob = doctorDob;
 	}
 	
 	
