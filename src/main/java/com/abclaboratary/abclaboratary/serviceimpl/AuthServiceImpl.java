@@ -42,6 +42,7 @@ public class AuthServiceImpl implements AuthService {
 			String phone = registerPatient.get("phone").toString();
 			String email = registerPatient.get("email").toString();
 			String dob = registerPatient.get("dob").toString();
+			String gender = registerPatient.get("gender").toString();
 			String password = registerPatient.get("password").toString();
 			String rePassword = registerPatient.get("repassword").toString();
 			String userRole = registerPatient.get("userRole").toString();
@@ -74,6 +75,7 @@ public class AuthServiceImpl implements AuthService {
 						patient.setPatientEmail(email);
 						patient.setPatientName(name);
 						patient.setPatientPhone(phone);
+						patient.setPatientGender(gender);
 						patient.setStatus(Long.valueOf(2));
 						patient.setUserId(user.getUserId());
 						patientRepo.save(patient);

@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.abclaboratary.abclaboratary.common.Common;
 import com.abclaboratary.abclaboratary.common.JwtUtils;
 import com.abclaboratary.abclaboratary.common.PasswordUtils;
 import com.abclaboratary.abclaboratary.entity.Appoinment;
@@ -58,6 +59,15 @@ public class ReportServiceImpl implements ReportService {
 	
 	@Autowired
 	ReportSubmittedDetailsRepo reportSubmittedDetailsRepo;
+	
+	@Autowired
+	UserRepo userRepo;
+	
+	@Autowired
+	PatientRepo patientRepo;
+	
+	@Autowired
+	Common common;
 
 	@Override
 	public JSONObject createReports(JSONObject createReports) {
@@ -312,6 +322,29 @@ public class ReportServiceImpl implements ReportService {
 						rds.setStatus(15L);
 						reportSubmittedDetailsRepo.save(rds);
 					}
+					
+					Optional<Patient> p = patientRepo.findByUserId(appoinment.get().getUserId());
+					Optional<User> u = userRepo.findById(appoinment.get().getUserId());
+					
+					String emailabove = common.getEmailabove();
+					String emailmiddle = "<div style=\"line-height: 140%; text-align: left; word-wrap: break-word;\">"
+							+ "<p style=\"font-size: 14px; line-height: 140%;\"><span style=\"font-size: 18px; line-height: 25.2px; color: #666666;\">Hello,</span></p>"
+							+ "<p style=\"font-size: 14px; line-height: 140%;\"> </p>"
+							+ "<p style=\"font-size: 14px; line-height: 140%;\"><span style=\"font-size: 18px; line-height: 25.2px; color: #666666;\">Dear "+p.get().getPatientName()+",</span></p>"
+							+ "<p style=\"font-size: 14px; line-height: 140%;\"> </p>"
+							+ "<p style=\"font-size: 14px; line-height: 140%;\"><span style=\"font-size: 18px; line-height: 25.2px; color: #666666;\">Your Report is Ready. Please login to ABC Laboratory system and go to the Report tab and check your report.</span></p>"
+							+ "<p style=\"font-size: 14px; line-height: 140%;\"> </p>"
+							+ "<p style=\"font-size: 14px; line-height: 140%;\"><span style=\"font-size: 18px; line-height: 25.2px; color: #666666;\">Thank you</span></p>"
+							
+							+ "</div>";
+					String emailbelow = common.getEmailabelow();
+					
+					String completeEmail = emailabove+emailmiddle+emailbelow;
+					
+					String getToEmail = u.get().getUserEmail();
+					System.out.println("getToEmail=============="+getToEmail);
+					
+					common.sendEMail(getToEmail, "Report Details", completeEmail);
 					
 					status = "Success";
 					statusCode = "00";
