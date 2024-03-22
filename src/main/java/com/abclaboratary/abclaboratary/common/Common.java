@@ -1,7 +1,11 @@
 package com.abclaboratary.abclaboratary.common;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Properties;
+import java.util.Random;
 
 import javax.mail.Message;
 import javax.mail.PasswordAuthentication;
@@ -56,6 +60,42 @@ public class Common {
 			e.printStackTrace();
 			return false;
 		}
+	}
+	
+	public String generateRandomPassword() {
+
+		final Random RANDOM = new SecureRandom();
+		/** Length of password. @see #generateRandomPassword() */
+		final int PASSWORD_LENGTH = 8;
+		// Pick from some letters that won't be easily mistaken for each
+		// other. So, for example, omit o O and 0, 1 l and L.
+		String letters = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789+@";
+
+		String randompw = "";
+		for (int i = 0; i < PASSWORD_LENGTH; i++) {
+			int index = (int) (RANDOM.nextDouble() * letters.length());
+			randompw += letters.substring(index, index + 1);
+		}
+		System.out.println("Gen Ran Pass " + randompw);
+		System.out.println("Gen Ran Pass and send mail here" + randompw);
+
+		String encryptedpassword = getEncryptedPassword(randompw);
+		System.out.println("encrpted " + encryptedpassword);
+		return randompw;
+	}
+	
+	@SuppressWarnings("restriction")
+	public static String getEncryptedPassword(String clearTextPassword) {
+
+		try {
+			MessageDigest md = MessageDigest.getInstance("SHA-256");
+			md.update(clearTextPassword.getBytes());
+			return new sun.misc.BASE64Encoder().encode(md.digest());
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+			// _log.error("Failed to encrypt password.", e);
+		}
+		return "";
 	}
 	
 	
